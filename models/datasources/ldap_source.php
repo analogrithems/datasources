@@ -80,9 +80,9 @@ class LdapSource extends DataSource {
         return $field;
     }
     
-    // Connection --------------------------------------------------------------
+    // Connection to ldap server
     function connect($bindDN = null, $passwd = null) {
-        $config = $this->config;
+        $config = array_merge($this->_baseConfig,$this->config);
         $this->connected = false;
         $hasFailover = false;
 	if(isset($config['host']) && is_array($config['host']) ){
@@ -188,7 +188,7 @@ class LdapSource extends DataSource {
     function reconnect($config = null) {
         $this->disconnect();
         if ($config != null) {
-            $this->config = am($this->_baseConfig, $this->config, $config);
+            $this->config = array_merge($this->_baseConfig, $this->config, $config);
         }
         return $this->connect();
     }
